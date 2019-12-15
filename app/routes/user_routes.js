@@ -35,7 +35,10 @@ router.post('/sign-up', (req, res, next) => {
     .then(credentials => {
       if (!credentials ||
         !credentials.password ||
-        credentials.password !== credentials.password_confirmation) {
+        credentials.password !== credentials.password_confirmation ||
+        !credentials.email ||
+        !credentials.phoneNumber ||
+        !credentials.fullName) {
         throw new BadParamsError()
       }
     })
@@ -45,7 +48,9 @@ router.post('/sign-up', (req, res, next) => {
       // return necessary params to create a user
       return {
         email: req.body.credentials.email,
-        hashedPassword: hash
+        hashedPassword: hash,
+        phoneNumber: req.body.credentials.phoneNumber,
+        fullName: req.body.credentials.fullName,
       }
     })
     // create user with provided email and hashed password
