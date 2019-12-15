@@ -24,7 +24,7 @@ const auth = require('./lib/auth')
 const requestLogger = require('./lib/request_logger')
 
 // require middleware for accepting token or bearer
-const OrBearer = require('./lib/token_or_bearer')
+const tokenOrBearer = require('./lib/token_or_bearer')
 
 // Define Ports
 const reactPort = 7165
