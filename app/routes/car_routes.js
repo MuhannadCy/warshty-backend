@@ -20,13 +20,13 @@ const router = express.Router();
 /**
  * Action:      INDEX
  * Method:      GET
- * URI:         /:id/car
+ * URI:         /api/car
  * Description: Get All Cars and one
  */
 
-router.get('api/car', requireToken, (req, res) => {
+router.get('/api/car', requireToken, (req, res) => {
     Car.find()
-        .then((car) => {
+        .then((cars) => {
             res.status(200).json({ cars: cars });
         })
         .catch((error) => {
@@ -39,19 +39,17 @@ router.get('api/car', requireToken, (req, res) => {
 /**
  * Action:      CREATE new car
  * Method:      POST
- * URI:         /api/cars
- * Description: Create a new Article
+ * URI:         /api/car
+ * Description: Create a new Car
 */
-router.post('api/car', requireToken, (req, res, next) => {
+router.post('/api/car', requireToken, (req, res, next) => {
     Car.create(req.body.car)
 
         .then((newCar) => {
             res.status(201).json({ car: newCar });
         })
         // Catch any errors that might occur
-        .catch((error) => {
-            res.status(500).json({ error: error });
-        });
+        .catch(next)
 });
 
 /**
@@ -60,8 +58,8 @@ router.post('api/car', requireToken, (req, res, next) => {
 * URI:          /api/car/:id
 * Description: Delete An car by Car ID
  */
-router.delete('/api/:id/car/:id', requireToken, (req, res) => {
-    Article.findById(req.params.id)
+router.delete('/api/car/:id', requireToken, (req, res, next) => {
+    Car.findById(req.params.id)
         .then((car) => {
             if (car) {
                 // Pass the result of Mongoose's `.delete` method to the next `.then`
@@ -76,9 +74,7 @@ router.delete('/api/:id/car/:id', requireToken, (req, res) => {
             res.status(204).end();
         })
         // Catch any errors that might occur
-        .catch((error) => {
-            res.status(500).json({ error: error });
-        });
+        .catch(next)
 });
 
 
