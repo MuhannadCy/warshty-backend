@@ -4,7 +4,7 @@ const crypto = require('crypto')
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 // see above for explanation of "salting", 10 rounds is recommended
 const bcryptSaltRounds = 10
@@ -34,11 +34,11 @@ router.post('/sign-up', (req, res, next) => {
     // the password is an empty string
     .then(credentials => {
       if (!credentials ||
-          !credentials.password ||
-          credentials.password !== credentials.password_confirmation ||
-          !credentials.email ||
-          !credentials.phoneNumber ||
-          !credentials.fullName) {
+        !credentials.password ||
+        credentials.password !== credentials.password_confirmation ||
+        !credentials.email ||
+        !credentials.phoneNumber ||
+        !credentials.fullName) {
         throw new BadParamsError()
       }
     })
