@@ -31,9 +31,10 @@ const router = express.Router()
 
 // SHOW ALL
 // GET api/customer/5a7db6c74d55bc51bdf39793
-router.get('/api/customer/', requireToken, (req, res, next) => {
+router.get('/api/customer', requireToken, (req, res, next) => {
     // req.params.id will be set based on the `:id` in the route
-    Customer.find()
+
+    Customer.find({shop: req.user.id})
         .then((customers) => {
             res.status(200).json({ customers: customers })
         })
