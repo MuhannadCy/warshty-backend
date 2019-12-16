@@ -4,7 +4,7 @@ const crypto = require('crypto')
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 
 // see above for explanation of "salting", 10 rounds is recommended
 const bcryptSaltRounds = 10
@@ -66,6 +66,7 @@ router.post('/sign-up', (req, res, next) => {
 // POST /sign-in
 router.post('/sign-in', (req, res, next) => {
   const pw = req.body.credentials.password
+  
   let user
 
   // find a user based on the email that was passed
