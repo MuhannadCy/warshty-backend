@@ -21,6 +21,7 @@ const router = express.Router();
  * Action:      INDEX
  * Method:      GET
  * URI:         /api/car
+ * URI:         /api/car/5df631d5ddcfb43dd9ce75ab
  * Description: Get All Cars and one
  */
 
@@ -28,6 +29,16 @@ router.get('/api/car', requireToken, (req, res) => {
     Car.find()
         .then((cars) => {
             res.status(200).json({ cars: cars });
+        })
+        .catch((error) => {
+            res.status(500).json({ error: error });
+        });
+});
+
+router.get('/api/car/:id', requireToken, (req, res) => {
+    Car.findById(req.params.id)
+        .then((car) => {
+            res.status(200).json({ car: car });
         })
         .catch((error) => {
             res.status(500).json({ error: error });
@@ -53,9 +64,27 @@ router.post('/api/car', requireToken, (req, res, next) => {
 });
 
 /**
+ * Action:      UPDATE a car
+ * Method:      patch
+ * URI:         /api/car/5df631d5ddcfb43dd9ce75ab
+ * Description: Update a Car
+*/
+router.patch('/api/car/:id', requireToken, removeBlanks, (req, res, next) => {
+
+    delete req.body.car.owner
+    Car.findById(req.params.id)
+        .then(car => {
+            requireOwnership(req, car)
+            return car.update(req.body.car)
+        })
+        .then(() => res.status(204))
+        .catch(next)
+});
+
+/**
  * Action:      DESTROY
  * Method:      DELETE
-* URI:          /api/car/:id
+* URI:          /api/car/5df631d5ddcfb43dd9ce75ab
 * Description: Delete An car by Car ID
  */
 router.delete('/api/car/:id', requireToken, (req, res, next) => {
