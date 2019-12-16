@@ -66,6 +66,7 @@ router.post('/sign-up', (req, res, next) => {
 // POST /sign-in
 router.post('/sign-in', (req, res, next) => {
   const pw = req.body.credentials.password
+  
   let user
 
   // find a user based on the email that was passed

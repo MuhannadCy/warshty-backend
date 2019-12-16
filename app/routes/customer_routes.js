@@ -80,20 +80,22 @@ router.post('/api/customer', requireToken, (req, res, next) => {
 router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) => {
     // if the client attempts to change the `owner` property by including a new
     // owner, prevent that by deleting that key/value pair
-    delete req.body.customer.owner
+
+    delete req.body.customer.shop
 
     Customer.findById(req.params.id)
         .then(handle404)
         .then(customer => {
             // pass the `req` object and the Mongoose record to `requireOwnership`
             // it will throw an error if the current user isn't the owner
-            requireOwnership(req, customer)
+            // requireOwnership(req, customer)
+            console.log(customer)
 
             // pass the result of Mongoose's `.update` to the next `.then`
             return customer.update(req.body.customer)
         })
         // if that succeeded, return 204 and no JSON
-        .then(() => res.status(204))
+        .then(customer => res.status(204).json({customer:customer}))
         // if an error occurs, pass it to the handler
         .catch(next)
 });
@@ -107,8 +109,20 @@ router.delete('/api/customer/:id', requireToken, (req, res, next) => {
     Customer.findById(req.params.id)
         .then(handle404)
         .then(customer => {
+            if (customer) {
+                return customer.remove()
+            } else {
+                
+        // If we couldn't find a user with the matching ID
+        res.status(404).json({
+            error: {
+              name: 'DocumentNotFoundError',
+              message: 'The provided ID doesn\'t match any documents'
+            }
+          });
+            }
             // throw an error if current user doesn't own `customer`
-            requireOwnership(req, customer)
+            // requireOwnership(req, customer)
             // delete the customer ONLY IF the above didn't throw
             customer.remove()
         })
