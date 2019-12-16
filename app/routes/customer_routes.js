@@ -61,7 +61,6 @@ router.get('/api/customer/:id', requireToken, (req, res) => {
 // POST /customer
 router.post('/api/customer', requireToken, (req, res, next) => {
     // set owner of new customer to be current user
-    console.log(req.user.id)
     req.body.customer.shop = req.user.id
 
     Customer.create(req.body.customer)
@@ -80,20 +79,18 @@ router.post('/api/customer', requireToken, (req, res, next) => {
 router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) => {
     // if the client attempts to change the `owner` property by including a new
     // owner, prevent that by deleting that key/value pair
-    delete req.body.customer.owner
-
+    delete req.body.customer.shop
     Customer.findById(req.params.id)
         .then(handle404)
         .then(customer => {
             // pass the `req` object and the Mongoose record to `requireOwnership`
             // it will throw an error if the current user isn't the owner
-            requireOwnership(req, customer)
-
+            // requireOwnership(req, customer)
             // pass the result of Mongoose's `.update` to the next `.then`
             return customer.update(req.body.customer)
         })
         // if that succeeded, return 204 and no JSON
-        .then(() => res.status(204))
+        .then(customer => res.status(204).json({updatedCustomer:customer }))
         // if an error occurs, pass it to the handler
         .catch(next)
 });
@@ -105,10 +102,10 @@ router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) =
 // DELETE /api/customer/5a7db6c74d55bc51bdf39793
 router.delete('/api/customer/:id', requireToken, (req, res, next) => {
     Customer.findById(req.params.id)
-        .then(handle404)
+        //.then(handle404)
         .then(customer => {
             // throw an error if current user doesn't own `customer`
-            requireOwnership(req, customer)
+            // requireOwnership(req, customer)
             // delete the customer ONLY IF the above didn't throw
             customer.remove()
         })
