@@ -95,7 +95,7 @@ router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) =
             return customer.update(req.body.customer)
         })
         // if that succeeded, return 204 and no JSON
-        .then(() => res.status(204))
+        .then(customer => res.status(204).json({customer:customer}))
         // if an error occurs, pass it to the handler
         .catch(next)
 });
