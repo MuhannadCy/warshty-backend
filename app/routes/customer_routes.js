@@ -31,9 +31,10 @@ const router = express.Router()
 
 // SHOW ALL
 // GET api/customer/5a7db6c74d55bc51bdf39793
-router.get('/api/customer/', requireToken, (req, res, next) => {
+router.get('/api/customer', requireToken, (req, res, next) => {
     // req.params.id will be set based on the `:id` in the route
-    Customer.find()
+
+    Customer.find({shop: req.user.id})
         .then((customers) => {
             res.status(200).json({ customers: customers })
         })
@@ -83,6 +84,7 @@ router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) =
     delete req.body.customer.shop
 
     Customer.findById(req.params.id)
+        .then(handle404)
         .then(customer => {
             // pass the `req` object and the Mongoose record to `requireOwnership`
             // it will throw an error if the current user isn't the owner
@@ -104,7 +106,8 @@ router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) =
 // DESTROY
 // DELETE /api/customer/5a7db6c74d55bc51bdf39793
 router.delete('/api/customer/:id', requireToken, (req, res, next) => {
-    customer.findById(req.params.id)
+    Customer.findById(req.params.id)
+        .then(handle404)
         .then(customer => {
             if (customer) {
                 return customer.remove()
