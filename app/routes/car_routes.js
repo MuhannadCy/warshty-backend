@@ -71,13 +71,13 @@ router.post('/api/car', requireToken, (req, res, next) => {
 */
 router.patch('/api/car/:id', requireToken, removeBlanks, (req, res, next) => {
 
-    delete req.body.car.owner
+    delete req.body.car.customer
     Car.findById(req.params.id)
+        .then(handle404)
         .then(car => {
-            requireOwnership(req, car)
-            return car.update(req.body.car)
+            return update(car, req)
         })
-        .then(() => res.status(204))
+        .then(car => res.status(204).json({ updateCar: car }))
         .catch(next)
 });
 
@@ -108,3 +108,4 @@ router.delete('/api/car/:id', requireToken, (req, res, next) => {
 
 
 module.exports = router;
+
