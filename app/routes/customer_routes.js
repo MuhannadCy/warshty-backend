@@ -61,7 +61,6 @@ router.get('/api/customer/:id', requireToken, (req, res) => {
 // POST /customer
 router.post('/api/customer', requireToken, (req, res, next) => {
     // set owner of new customer to be current user
-    console.log(req.user.id)
     req.body.customer.shop = req.user.id
 
     Customer.create(req.body.customer)
@@ -89,13 +88,13 @@ router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) =
             // pass the `req` object and the Mongoose record to `requireOwnership`
             // it will throw an error if the current user isn't the owner
             // requireOwnership(req, customer)
-            console.log(customer)
+            // console.log(customer)
 
             // pass the result of Mongoose's `.update` to the next `.then`
             return customer.update(req.body.customer)
         })
         // if that succeeded, return 204 and no JSON
-        .then(customer => res.status(204).json({customer:customer}))
+        .then(customer => res.status(204).json({customer: customer}))
         // if an error occurs, pass it to the handler
         .catch(next)
 });
@@ -107,7 +106,7 @@ router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) =
 // DELETE /api/customer/5a7db6c74d55bc51bdf39793
 router.delete('/api/customer/:id', requireToken, (req, res, next) => {
     Customer.findById(req.params.id)
-        .then(handle404)
+        //.then(handle404)
         .then(customer => {
             if (customer) {
                 return customer.remove()
