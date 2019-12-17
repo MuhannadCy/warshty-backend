@@ -6,6 +6,7 @@ const passport = require('passport')
 
 // pull in Mongoose model for customer
 const Customer = require('../models/customer')
+const Car = require('../models/car')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -106,10 +107,12 @@ router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) =
 // DELETE /api/customer/5a7db6c74d55bc51bdf39793
 router.delete('/api/customer/:id', requireToken, (req, res, next) => {
     Customer.findById(req.params.id)
-        //.then(handle404)
-        .then(customer => {
-            if (customer) {
-                return customer.remove()
+        .then(handle404)
+        .then(foundCustomer => {
+            if (foundCustomer) {
+                Car.deleteMany({customer: req.params.id})
+                .then(handle404)
+                return foundCustomer.remove()
             } else {
                 
         // If we couldn't find a user with the matching ID
