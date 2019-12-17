@@ -36,9 +36,9 @@ router.get('/api/car', requireToken, (req, res) => {
 });
 
 router.get('/api/car/:id', requireToken, (req, res) => {
-    Car.findById(req.params.id)
-        .then((car) => {
-            res.status(200).json({ car: car });
+    Car.find({customer: req.params.id})
+        .then((cars) => {
+            res.status(200).json({ cars: cars });
         })
         .catch((error) => {
             res.status(500).json({ error: error });
@@ -53,9 +53,9 @@ router.get('/api/car/:id', requireToken, (req, res) => {
  * URI:         /api/car
  * Description: Create a new Car
 */
-router.post('/api/car', requireToken, (req, res, next) => {
+router.post('/api/car/:id', requireToken, (req, res, next) => {
+    req.body.car.customer = req.params.id
     Car.create(req.body.car)
-
         .then((newCar) => {
             res.status(201).json({ car: newCar });
         })
