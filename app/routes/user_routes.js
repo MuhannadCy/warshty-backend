@@ -105,7 +105,7 @@ router.post('/sign-in', (req, res, next) => {
 
 // CHANGE password
 // PATCH /change-password
-router.patch('/change-password', requireToken, (req, res, next) => {
+router.put('/change-password', requireToken, (req, res, next) => {
   let user
   // `req.user` will be determined by decoding the token payload
   User.findById(req.user.id)

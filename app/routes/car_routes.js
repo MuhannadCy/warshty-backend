@@ -69,7 +69,7 @@ router.post('/api/car/:id', requireToken, (req, res, next) => {
  * URI:         /api/car/5df631d5ddcfb43dd9ce75ab
  * Description: Update a Car
 */
-router.patch('/api/car/:id', requireToken, removeBlanks, (req, res, next) => {
+router.put('/api/car/:id', requireToken, removeBlanks, (req, res, next) => {
 
     delete req.body.car.customer
     Car.findById(req.params.id)

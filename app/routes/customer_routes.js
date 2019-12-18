@@ -77,7 +77,7 @@ router.post('/api/customer', requireToken, (req, res, next) => {
 
 // UPDATE
 // PATCH /customer/5a7db6c74d55bc51bdf39793
-router.patch('/api/customer/:id', requireToken, removeBlanks, (req, res, next) => {
+router.put('/api/customer/:id', requireToken, removeBlanks, (req, res, next) => {
     // if the client attempts to change the `owner` property by including a new
     // owner, prevent that by deleting that key/value pair
 

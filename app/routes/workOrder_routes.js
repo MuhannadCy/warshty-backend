@@ -69,7 +69,7 @@ router.post('/api/workorder/:id', requireToken, (req, res, next) => {
  * URI:         /api/WorkOrder/5df631d5ddcfb43dd9ce75ab
  * Description: Update a WorkOrder
 */
-router.patch('/api/workorder/:id', requireToken, removeBlanks, (req, res, next) => {
+router.put('/api/workorder/:id', requireToken, removeBlanks, (req, res, next) => {
     // if the client attempts to change the `owner` property by including a new
     // owner, prevent that by deleting that key/value pair
 
