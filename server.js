@@ -44,7 +44,7 @@ const app = express()
 // `CLIENT_ORIGIN` is an environment variable that will be set on Heroku
 //app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:${reactPort}` }))
 let corsMiddleware = function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', ` https://serene-atoll-14380.herokuapp.com`);
+  res.header('Access-Control-Allow-Origin', `https://serene-atoll-14380.herokuapp.com`);
   res.header('Access-Control-Allow-Methods', 'OPTIONS, GET, PUT, PATCH, POST, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization');
   next();
